@@ -5,18 +5,19 @@ const {sequelize} = require('../../src/config/database');
 
 describe('Event Ticket Booking System', () => {
   beforeAll(async () => {
-    await sequelize.sync({ force: true});
+    // await sequelize.sync({ force: true});
+    await sequelize.sync({ force: process.env.NODE_ENV === 'development' });
   });
 
-  // afterEach(async () => {
-  //   await sequelize.destroy({ truncate: true });
-  // });
+  afterEach(async () => {
+    await Event.Event.destroy({ truncate: true });
+  });
 
   describe('Event Initialization', () => {
     it('should initialize an event with specified tickets', async () => {
       const response = await request(app)
-        .post('/initialize')
-        .send({ totalTickets: 100 });
+        .post('/api/events/initialize')
+        .send({ totalTickets: 100, eventName:"PORT-Harcourt Picnic"});
       
       expect(response.statusCode).toBe(201);
       expect(response.body.eventId).toBeDefined();
@@ -26,7 +27,7 @@ describe('Event Ticket Booking System', () => {
   describe('Ticket Booking', () => {
     it('should book a ticket successfully', async () => {
       // Create event first
-      const event = await Event.createEvent(50);
+      const event = await Event.createEvent(50, "Calabar Carnival");
 
       const response = await request(app)
         .post('/book')
@@ -40,7 +41,7 @@ describe('Event Ticket Booking System', () => {
     });
 
     it('should add to waiting list when tickets are sold out', async () => {
-      const event = await Event.createEvent(1);
+      const event = await Event.createEvent(1, "Abuja, Carnival");
 
       // Book first ticket
       await request(app)
@@ -65,7 +66,7 @@ describe('Event Ticket Booking System', () => {
 // tests/integration/eventApi.test.js
 describe('Event API Integration', () => {
   it('should handle concurrent ticket bookings', async () => {
-    const event = await Event.createEvent(10);
+    const event = await Event.createEvent(10, "Lagos Party");
     
     const bookingPromises = Array(15).fill().map((_, index) => 
       request(app)

@@ -1,11 +1,12 @@
-// tests/unit/eventModel.test.js
 const { 
     createEvent, 
     bookTicket, 
     cancelTicket, 
-    getEventStatus 
+    getEventStatus,
+    Booking
   } = require('../../src/models/eventModel');
-  const { sequelize, Event, Booking } = require('../../src/models/eventModel');
+  const {sequelize} = require('../../src/config/database');
+
   
   describe('Event Model Unit Tests', () => {
     let testEvent;

@@ -1,13 +1,7 @@
-// src/models/eventModel.js
 const { Sequelize, DataTypes } = require('sequelize');
-const Redis = require('ioredis');
 const logger = require('../utils/logger');
+const redisClient = require('../config/cache')
 
-// Redis Cache Configuration
-const redisClient = new Redis({
-  host: process.env.REDIS_HOST || 'localhost',
-  port: process.env.REDIS_PORT || 6379
-});
 
 // MySQL Sequelize Configuration
 const sequelize = new Sequelize(

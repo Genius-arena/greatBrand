@@ -1,7 +1,7 @@
 // tests/integration/eventApi.test.js
 const request = require('supertest');
 const app = require('../../app');
-const { sequelize, Event } = require('../../src/models/eventModel');
+const {sequelize} = require('../../src/config/database');
 
 describe('Event Booking API Integration Tests', () => {
   let createdEventId;

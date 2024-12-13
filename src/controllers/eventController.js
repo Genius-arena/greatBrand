@@ -10,6 +10,7 @@ const { validateEventInitialization, validateBooking } = require('../utils/valid
  * @returns {Object} Event initialization response
  */
 async function initializeEvent(req, res) {
+  console.log(req.body);
   try {
     // Validate input
     const { error } = validateEventInitialization(req.body);
