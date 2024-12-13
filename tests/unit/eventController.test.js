@@ -1,17 +1,16 @@
-// tests/unit/eventController.test.js
 const request = require('supertest');
 const app = require('../../server');
 const Event = require('../../src/models/eventModel');
-const sequelize = require('../../config/database');
+const {sequelize} = require('../../src/config/database');
 
 describe('Event Ticket Booking System', () => {
   beforeAll(async () => {
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ force: true});
   });
 
-  afterEach(async () => {
-    await Event.destroy({ truncate: true });
-  });
+  // afterEach(async () => {
+  //   await sequelize.destroy({ truncate: true });
+  // });
 
   describe('Event Initialization', () => {
     it('should initialize an event with specified tickets', async () => {
@@ -48,7 +47,6 @@ describe('Event Ticket Booking System', () => {
         .post('/book')
         .send({ 
           eventId: event.id,
-          userId: 'user1' 
         });
 
       // Second booking should go to waiting list

@@ -14,9 +14,9 @@ async function initializeEvent(req, res) {
     // Validate input
     const { error } = validateEventInitialization(req.body);
     if (error) {
-      return res.status(400).json({ 
-        error: 'Invalid event initialization', 
-        details: error.details 
+      return res.status(400).json({
+        error: 'Invalid event initialization',
+        details: error.details
       });
     }
 
@@ -24,7 +24,7 @@ async function initializeEvent(req, res) {
     const event = await createEvent(totalTickets, eventName);
 
     logger.info(`Event initialized: ${eventName}, Tickets: ${totalTickets}`);
-    
+
     res.status(201).json({
       message: 'Event successfully initialized',
       eventId: event.id,
@@ -32,9 +32,9 @@ async function initializeEvent(req, res) {
     });
   } catch (err) {
     logger.error('Event initialization error', err);
-    res.status(500).json({ 
-      error: 'Failed to initialize event', 
-      details: err.message 
+    res.status(500).json({
+      error: 'Failed to initialize event',
+      details: err.message
     });
   }
 }
@@ -50,9 +50,9 @@ async function bookTicketForUser(req, res) {
     // Validate input
     const { error } = validateBooking(req.body);
     if (error) {
-      return res.status(400).json({ 
-        error: 'Invalid booking request', 
-        details: error.details 
+      return res.status(400).json({
+        error: 'Invalid booking request',
+        details: error.details
       });
     }
 
@@ -62,17 +62,17 @@ async function bookTicketForUser(req, res) {
     logger.info(`Ticket booked for user ${userId} on event ${eventId}`);
 
     res.status(booking.waitingList ? 201 : 200).json({
-      message: booking.waitingList 
-        ? 'Added to waiting list' 
+      message: booking.waitingList
+        ? 'Added to waiting list'
         : 'Ticket successfully booked',
       bookingId: booking.id,
       status: booking.waitingList ? 'Waiting List' : 'Confirmed'
     });
   } catch (err) {
     logger.error('Ticket booking error', err);
-    res.status(500).json({ 
-      error: 'Failed to book ticket', 
-      details: err.message 
+    res.status(500).json({
+      error: 'Failed to book ticket',
+      details: err.message
     });
   }
 }
@@ -93,16 +93,16 @@ async function cancelUserTicket(req, res) {
     logger.info(`Ticket cancelled for user ${userId}, Booking ID: ${bookingId}`);
 
     res.status(200).json({
-      message: cancellation.waitingListAssigned 
-        ? 'Ticket cancelled and assigned to waiting list' 
+      message: cancellation.waitingListAssigned
+        ? 'Ticket cancelled and assigned to waiting list'
         : 'Ticket successfully cancelled',
       details: cancellation
     });
   } catch (err) {
     logger.error('Ticket cancellation error', err);
-    res.status(500).json({ 
-      error: 'Failed to cancel ticket', 
-      details: err.message 
+    res.status(500).json({
+      error: 'Failed to cancel ticket',
+      details: err.message
     });
   }
 }
@@ -127,9 +127,9 @@ async function getEventStatusDetails(req, res) {
     });
   } catch (err) {
     logger.error('Event status retrieval error', err);
-    res.status(500).json({ 
-      error: 'Failed to retrieve event status', 
-      details: err.message 
+    res.status(500).json({
+      error: 'Failed to retrieve event status',
+      details: err.message
     });
   }
 }

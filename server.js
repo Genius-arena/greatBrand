@@ -1,11 +1,7 @@
-// server.js
 const cluster = require('cluster');
 const os = require('os');
 const dotenv = require('dotenv');
-  // Worker process - initialize the application
-  const app = require('./app');
-  const { initializeDatabase } = require('./src/config/database');
-  const logger = require('./src/utils/logger');
+
   
 // Load environment variables
 dotenv.config();
@@ -28,7 +24,10 @@ if (cluster.isPrimary) {
   });
 } else {
 
-
+  // Worker process - initialize the application
+  const app = require('./app');
+  const { initializeDatabase } = require('./src/config/database');
+  const logger = require('./src/utils/logger');
   // Database and server initialization
   async function startServer() {
     try {

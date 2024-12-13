@@ -92,10 +92,10 @@ async function createEvent(totalTickets, eventName) {
 
   try {
     const event = await Event.create(
-      { 
-        name: eventName, 
-        totalTickets, 
-        availableTickets: totalTickets 
+      {
+        name: eventName,
+        totalTickets,
+        availableTickets: totalTickets
       },
       { transaction }
     );
@@ -123,9 +123,9 @@ async function bookTicket(eventId, userId) {
 
   try {
     // Retrieve event with pessimistic locking
-    const event = await Event.findByPk(eventId, { 
+    const event = await Event.findByPk(eventId, {
       lock: true,
-      transaction 
+      transaction
     });
 
     if (!event) {
@@ -190,9 +190,9 @@ async function cancelTicket(bookingId, userId) {
 
     // Find next waiting list booking
     const waitingListBooking = await Booking.findOne({
-      where: { 
-        EventId: booking.EventId, 
-        status: 'WAITING_LIST' 
+      where: {
+        EventId: booking.EventId,
+        status: 'WAITING_LIST'
       },
       order: [['createdAt', 'ASC']],
       transaction
@@ -215,9 +215,9 @@ async function cancelTicket(bookingId, userId) {
     }
 
     await transaction.commit();
-    return { 
-      waitingListAssigned, 
-      nextBookingId: waitingListAssigned ? waitingListBooking.id : null 
+    return {
+      waitingListAssigned,
+      nextBookingId: waitingListAssigned ? waitingListBooking.id : null
     };
   } catch (error) {
     await transaction.rollback();
@@ -276,5 +276,4 @@ module.exports = {
   getEventStatus,
   Event,
   Booking,
-  sequelize
 };

@@ -14,19 +14,7 @@ module.exports = {
         statements: 80
       }
     },
-    setupFiles: ['<rootDir>/tests/setup.js'],
+    // setupFiles: ['<rootDir>/tests/setup.js'],
     testTimeout: 30000,
     verbose: true
   };
-  
-  // tests/setup.js
-  require('dotenv').config({ path: '.env.test' });
-  
-  // Optionally add global setup or teardown logic
-  beforeAll(async () => {
-    // Global test setup if needed
-  });
-  
-  afterAll(async () => {
-    // Global test cleanup if needed
-  });

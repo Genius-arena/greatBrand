@@ -3,7 +3,7 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const compression = require('compression');
-const eventRoutes = require('./src/routes/eventRoutes');
+const eventRouter = require('./src/routes/eventRoutes');
 const errorHandler = require('./src/middleware/errorHandler');
 const rateLimiter = require('./src/middleware/rateLimiter');
 const logger = require('./src/utils/logger');
@@ -16,7 +16,7 @@ function createApp() {
   app.use(cors()); // Enable CORS
   app.use(compression()); // Compress responses
   app.use(express.json()); // JSON body parser
-  app.use(rateLimiter); // Rate limiting
+  app.use("/api", rateLimiter); // Rate limiting
 
   // Logging middleware
   app.use((req, res, next) => {
@@ -25,7 +25,7 @@ function createApp() {
   });
 
   // Routes
-  app.use('/api/events', eventRoutes);
+  app.use('/api/events', eventRouter);
 
   // Global error handler
   app.use(errorHandler);
