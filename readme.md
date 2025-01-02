@@ -67,7 +67,44 @@ The application follows a modular MVC (Model-View-Controller) architecture with 
 - MySQL Server
 - Redis Server
 
+## Environment Variables
+### Create a .env file with the following variables:
+
+# Server Configuration
+PORT=3000
+NODE_ENV=development
+
+# Database Configuration
+DB_HOST=localhost
+DB_USER=your_username
+DB_PASSWORD=your_password
+DB_NAME=event_booking_db
+
+# Redis Configuration
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+# Logging
+LOG_LEVEL=info
+
 ### Environment Configuration
+#### Server Configuration
+PORT=3000
+NODE_ENV=development
+
+#### Database Configuration
+DB_HOST=localhost
+DB_USER=your_username
+DB_PASSWORD=your_password
+DB_NAME=event_booking_db
+
+#### Redis Configuration
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+#### Logging
+LOG_LEVEL=info
+
 1. Clone the repository
 2. Copy `.env.example` to `.env`
 3. Configure database and Redis connection details
@@ -81,6 +118,9 @@ npm start
 
 ## Running Tests
 ```bash
+# Run all tests
+npm test
+
 # Unit Tests
 npm run test:unit
 
@@ -89,7 +129,122 @@ npm run test:integration
 
 # End-to-End Tests
 npm run test:e2e
+
+# Generate coverage report
+npm run test:coverage
 ```
+
+## API Documentation
+ ~~ The text in the curly bracket {} are all json
+
+1. Initialize Event
+Create a new event with a specified number of tickets.
+
+Endpoint: POST /api/events/initialize
+
+Request Body:
+{
+  "eventName": "Concert Name",
+  "totalTickets": 100
+}
+
+Success Response (201)
+{
+  "message": "Event successfully initialized",
+  "eventId": "uuid-string",
+  "totalTickets": 100
+}
+
+Error Response (400):
+{
+  "error": "Invalid event initialization",
+  "details": [
+    {
+      "message": "Total tickets must be a positive number"
+    }
+  ]
+}
+
+2. Book Ticket
+Book a ticket for a specific event.
+
+Endpoint: POST /api/events/book
+
+Request Body:
+{
+  "eventId": "event-uuid",
+  "userId": "user-identifier"
+}
+
+Success Response (200):
+{
+  "message": "Ticket successfully booked",
+  "bookingId": "booking-uuid",
+  "status": "Confirmed"
+}
+
+Waiting List Response (201):
+{
+  "message": "Added to waiting list",
+  "bookingId": "booking-uuid",
+  "status": "Waiting List"
+}
+
+
+3. Cancel Ticket
+Cancel a booked ticket.
+
+Endpoint: POST /api/events/cancel
+
+Request Body:
+{
+  "bookingId": "booking-uuid",
+  "userId": "user-identifier"
+}
+
+Success Response (200):
+{
+  "message": "Ticket successfully cancelled",
+  "details": {
+    "waitingListAssigned": true,
+    "nextBookingId": "next-booking-uuid"
+  }
+}
+
+
+4. Get Event Status
+Retrieve current status of an event.
+Endpoint: GET /api/events/status/:eventId
+
+Success Response (200):
+{
+  "eventId": "event-uuid",
+  "availableTickets": 50,
+  "totalTickets": 100,
+  "waitingListCount": 5
+}
+
+
+## Error Responses
+All endpoints may return the following error responses:
+
+Bad Request (400)
+{
+  "error": "Invalid input",
+  "details": "Error description"
+}
+
+Not Found 404
+{
+  "error": "Resource not found",
+  "details": "Specified resource could not be found"
+}
+
+Server Error (500)
+{
+  "error": "Internal server error",
+  "details": "An unexpected error occurred"
+}
 
 ## Test Coverage Targets
 - Unit Tests: 85%
